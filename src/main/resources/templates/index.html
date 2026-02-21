@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Crypto</title>
+    <style>
+        body{font-family:system-ui;margin:24px;max-width:980px}
+        textarea{width:100%;min-height:140px}
+        .row{display:flex;gap:12px;flex-wrap:wrap}
+        .row > *{flex:1;min-width:220px}
+        label{display:block;margin:8px 0 4px}
+        input, select, textarea, button{font-size:14px}
+        .err{padding:10px;background:#ffecec;border:1px solid #ffb3b3;margin:12px 0}
+    </style>
+</head>
+<body>
+<h2>Шифрование/Дешифрование</h2>
+
+<div th:if="${error != null}" class="err" th:text="${error}"></div>
+
+<form th:action="@{/process-text}" method="post">
+    <div class="row">
+        <div>
+            <label>Алгоритм</label>
+            <select name="algo" th:value="${algo}">
+                <option value="COLUMNAR_EN">Столбцовый (EN)</option>
+                <option value="VIGENERE_AUTOKEY_RU">Виженер автоключ (RU)</option>
+            </select>
+        </div>
+        <div>
+            <label>Режим</label>
+            <select name="mode" th:value="${mode}">
+                <option value="ENC">Шифровать</option>
+                <option value="DEC">Дешифровать</option>
+            </select>
+        </div>
+        <div>
+            <label>Ключ (K1)</label>
+            <input name="key" th:value="${key}" style="width:100%"/>
+        </div>
+
+        <div id="key2WrapText">
+            <label>Второй ключ (K2) для улучшенного столбцового (опц.)</label>
+            <input name="key2" th:value="${key2}" style="width:100%"/>
+        </div>
+    </div>
+
+    <label>Текст</label>
+    <textarea name="text" th:text="${text}"></textarea>
+
+    <button type="submit">Выполнить</button>
+</form>
+
+<div th:if="${result != null}">
+    <h3>Результат</h3>
+    <textarea readonly th:text="${result}"></textarea>
+</div>
+
+<hr/>
+
+<h3>Файл → файл (UTF-8 .txt)</h3>
+<form th:action="@{/process-file}" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div>
+            <label>Алгоритм</label>
+            <select name="algo">
+                <option value="COLUMNAR_EN">Столбцовый (EN)</option>
+                <option value="VIGENERE_AUTOKEY_RU">Виженер автоключ (RU)</option>
+            </select>
+        </div>
+        <div>
+            <label>Режим</label>
+            <select name="mode">
+                <option value="ENC">Шифровать</option>
+                <option value="DEC">Дешифровать</option>
+            </select>
+        </div>
+        <div>
+            <label>Ключ (K1)</label>
+            <input name="key" style="width:100%"/>
+        </div>
+
+        <div id="key2WrapFile">
+            <label>Второй ключ (K2) (опц.)</label>
+            <input name="key2" style="width:100%"/>
+        </div>
+    </div>
+
+    <label>Файл</label>
+    <input type="file" name="file" accept=".txt,text/plain" required/>
+    <button type="submit">Скачать результат</button>
+</form>
+
+
+
+<script>
+    function toggleKey2() {
+      // форма "текст"
+      const algoText = document.querySelector('form[action$="/process-text"] select[name="algo"]')?.value;
+      const wrapText = document.getElementById('key2WrapText');
+      if (wrapText) wrapText.style.display = (algoText === 'COLUMNAR_EN') ? 'block' : 'none';
+
+      // форма "файл"
+      const algoFile = document.querySelector('form[action$="/process-file"] select[name="algo"]')?.value;
+      const wrapFile = document.getElementById('key2WrapFile');
+      if (wrapFile) wrapFile.style.display = (algoFile === 'COLUMNAR_EN') ? 'block' : 'none';
+    }
+
+    document.addEventListener('change', (e) => {
+      if (e.target && e.target.name === 'algo') toggleKey2();
+    });
+
+    toggleKey2();
+</script>
+
+</body>
+</html>
+
