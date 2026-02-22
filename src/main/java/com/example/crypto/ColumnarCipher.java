@@ -80,7 +80,7 @@ public class ColumnarCipher {
     return b.toString();
   }
 
-
+  // Порядок столбцов по ключу: по букве, при равенстве — по позиции (как в методичке)
   private static int[] columnOrder(String key) {
     int m = key.length();
     Integer[] idx = new Integer[m];
