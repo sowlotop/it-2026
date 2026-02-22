@@ -23,7 +23,7 @@
         <div>
             <label>Алгоритм</label>
             <select name="algo" th:value="${algo}">
-                <option value="COLUMNAR_EN">Столбцовый (EN)</option>
+                <option value="COLUMNAR_EN">Столбцовый улучшенный (EN)</option>
                 <option value="VIGENERE_AUTOKEY_RU">Виженер автоключ (RU)</option>
             </select>
         </div>
@@ -35,13 +35,8 @@
             </select>
         </div>
         <div>
-            <label>Ключ (K1)</label>
+            <label>Ключ</label>
             <input name="key" th:value="${key}" style="width:100%"/>
-        </div>
-
-        <div id="key2WrapText">
-            <label>Второй ключ (K2) для улучшенного столбцового (опц.)</label>
-            <input name="key2" th:value="${key2}" style="width:100%"/>
         </div>
     </div>
 
@@ -64,7 +59,7 @@
         <div>
             <label>Алгоритм</label>
             <select name="algo">
-                <option value="COLUMNAR_EN">Столбцовый (EN)</option>
+                <option value="COLUMNAR_EN">Столбцовый улучшенный (EN)</option>
                 <option value="VIGENERE_AUTOKEY_RU">Виженер автоключ (RU)</option>
             </select>
         </div>
@@ -76,13 +71,8 @@
             </select>
         </div>
         <div>
-            <label>Ключ (K1)</label>
+            <label>Ключ</label>
             <input name="key" style="width:100%"/>
-        </div>
-
-        <div id="key2WrapFile">
-            <label>Второй ключ (K2) (опц.)</label>
-            <input name="key2" style="width:100%"/>
         </div>
     </div>
 
@@ -91,28 +81,9 @@
     <button type="submit">Скачать результат</button>
 </form>
 
-
-
-<script>
-    function toggleKey2() {
-      // форма "текст"
-      const algoText = document.querySelector('form[action$="/process-text"] select[name="algo"]')?.value;
-      const wrapText = document.getElementById('key2WrapText');
-      if (wrapText) wrapText.style.display = (algoText === 'COLUMNAR_EN') ? 'block' : 'none';
-
-      // форма "файл"
-      const algoFile = document.querySelector('form[action$="/process-file"] select[name="algo"]')?.value;
-      const wrapFile = document.getElementById('key2WrapFile');
-      if (wrapFile) wrapFile.style.display = (algoFile === 'COLUMNAR_EN') ? 'block' : 'none';
-    }
-
-    document.addEventListener('change', (e) => {
-      if (e.target && e.target.name === 'algo') toggleKey2();
-    });
-
-    toggleKey2();
-</script>
+<p style="margin-top:16px;opacity:.8">
+    EN: шифруются только A–Z. RU: только русские буквы (Ё→Е).
+</p>
 
 </body>
 </html>
-
